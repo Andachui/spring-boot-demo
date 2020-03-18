@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.atguigu.springboot.dao.ActivityTimeConfigDao" >
+    <resultMap id="BaseResultMap" type="com.atguigu.springboot.entities.ActivityTimeConfig" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="activity_id" property="activityId" jdbcType="VARCHAR" />
+        <result column="pre_activity_id" property="preActivityId" jdbcType="VARCHAR" />
+        <result column="is_current_mgm" property="isCurrentMgm" jdbcType="INTEGER" />
+        <result column="activity_name" property="activityName" jdbcType="VARCHAR" />
+        <result column="activity_flag" property="activityFlag" jdbcType="INTEGER" />
+        <result column="activity_type" property="activityType" jdbcType="INTEGER" />
+        <result column="allow_business_category" property="allowBusinessCategory" jdbcType="VARCHAR" />
+        <result column="lock_period" property="lockPeriod" jdbcType="VARCHAR" />
+        <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+        <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="last_update_user" property="lastUpdateUser" jdbcType="VARCHAR" />
+        <result column="last_updata_time" property="lastUpdataTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, activity_id, pre_activity_id, is_current_mgm, activity_name, activity_flag, activity_type, allow_business_category,
+        lock_period, begin_time, end_time, create_user, create_time, last_update_user, last_updata_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from activity_time_config
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>
