@@ -2,93 +2,105 @@ package com.dachui.quickstart;
 
 import org.junit.Test;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ThreadListTests {
 
     @Test
     public void test(){
-        EnevtStorage eventStorage = new EnevtStorage();
+        HashMap<Integer,Integer> map=new HashMap<>();
+        Integer key=new Integer(129);
+        map.put(key,2);
+        Integer s=map.get(129);
+        System.out.println(s);
 
-        Thread t1 = new Thread(new pruducer(eventStorage));
-        Thread t2 = new Thread(new consumer(eventStorage));
-        t1.start();
-        t2.start();
-    }
-
-    static class pruducer implements Runnable{
-
-        private EnevtStorage enevtStorage;
-
-        public pruducer(EnevtStorage enevtStorage) {
-            this.enevtStorage = enevtStorage;
-        }
-
-        @Override
-        public void run() {
-            for (int i = 0; i <100 ; i++) {
-                enevtStorage.put();
-            }
-        }
+//        Thread t1 = new Thread(new pruducer(eventStorage));
+//        Thread t2 = new Thread(new consumer(eventStorage));
+//        t1.start();
+//        t2.start();
     }
 
 
-    static  class consumer implements Runnable{
+}
+ class Storage {
+    // 仓库最大存储量
+    private final int MAX_SIZE = 100;
 
-        private EnevtStorage enevtStorage;
+    // 仓库存储的载体
+    private LinkedList<Object> list = new LinkedList<Object>();
+    // 锁
+    private final Lock lock = new ReentrantLock();
 
-        public consumer(EnevtStorage enevtStorage) {
-            this.enevtStorage = enevtStorage;
-        }
+    // 仓库满的条件变量
+    private final Condition full = lock.newCondition();
 
-        @Override
-        public void run() {
-            for (int i = 0; i <100 ; i++) {
-                enevtStorage.take();
+    // 仓库空的条件变量
+    private final Condition empty = lock.newCondition();
+
+    // 生产产品
+    public void produce(String producer) {
+        lock.lock();
+        // 如果仓库已满
+        while (list.size() == MAX_SIZE) {
+            System.out.println("仓库已满，【" + producer + "】： 暂时不能执行生产任务!");
+            try {
+                // 由于条件不满足，生产阻塞
+                full.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
+
+        // 生产产品
+        list.add(new Object());
+
+        System.out.println("【" + producer + "】：生产了一个产品\t【现仓储量为】:" + list.size());
+
+        empty.signalAll();
+
+        // 释放锁
+        lock.unlock();
+
     }
 
-    static class EnevtStorage {
+    // 消费产品
+    public void consume(String consumer) {
+        // 获得锁
+        lock.lock();
 
-        private int maxSize ;
-        private LinkedList<Date> storage ;
-
-        public EnevtStorage() {
-            this.maxSize = 10;
-            this.storage = new LinkedList<>();
-        }
-
-        public synchronized void put (){
-
-            if(storage.size() == maxSize){
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        // 如果仓库存储量不足
+        while (list.size() == 0) {
+            System.out.println("仓库已空，【" + consumer + "】： 暂时不能执行消费任务!");
+            try {
+                // 由于条件不满足，消费阻塞
+                empty.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            storage.add(new Date());
-            System.out.println("我已经进行生产  仓库里面一共有 数量： "+storage.size());
-            notify();
         }
 
-        public synchronized  void take(){
-            if(storage.size() == 0){
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            //拿到并删除
-            storage.poll();
-            System.out.println("我已经进行消费 仓库里面一共有 数量： "+storage.size());
-            notify();
-        }
+        list.remove();
+        System.out.println("【" + consumer + "】：消费了一个产品\t【现仓储量为】:" + list.size());
+        full.signalAll();
+
+        // 释放锁
+        lock.unlock();
+
+    }
+
+    public LinkedList<Object> getList() {
+        return list;
+    }
+
+    public void setList(LinkedList<Object> list) {
+        this.list = list;
+    }
+
+    public int getMAX_SIZE() {
+        return MAX_SIZE;
     }
 }
-
 
