@@ -4,8 +4,9 @@ public class IpTest {
 }
 
 
-class Solution {
+class Solution2 {
     public String validIPAddress(String IP) {
+        ThreadLocal local=new ThreadLocal();
         if(IP.startsWith(":")||IP.startsWith(".")
                 ||IP.endsWith(":")||IP.endsWith(".")) return "Neither";
         String[] splitted = IP.split("\\.");

@@ -53,6 +53,9 @@ class DoubleCheckSingleton {  //4.双重校验锁，1.5以后可用
         if (singleton == null) {
             synchronized (DoubleCheckSingleton.class) {
                 if (singleton == null) {
+                    // 1 .分配空间
+                    // 2 .初始化
+                    // 3 .引用赋值
                     singleton = new DoubleCheckSingleton();
                 }
             }
@@ -63,6 +66,10 @@ class DoubleCheckSingleton {  //4.双重校验锁，1.5以后可用
 
 enum EnumSingleton {  //5.枚举型，Effective Java作者提倡的。可防止反序列化
     INSTANCE;
+
+    public void doSomeThing(){
+
+    }
 }
 
 

@@ -17,14 +17,27 @@ public class ThreadListTests {
         Integer s=map.get(129);
         System.out.println(s);
 
-//        Thread t1 = new Thread(new pruducer(eventStorage));
-//        Thread t2 = new Thread(new consumer(eventStorage));
+        Storage storage=new Storage();
+        Thread t1 = new Thread(new Producer1(storage));
+
 //        t1.start();
 //        t2.start();
     }
 
 
 }
+class Producer1 implements Runnable{
+    @Override
+    public void run() {
+        storage.produce(Thread.currentThread().getName());
+    }
+
+    private Storage storage;
+    public Producer1(Storage storage) {
+        this.storage=storage;
+    }
+}
+
  class Storage {
     // 仓库最大存储量
     private final int MAX_SIZE = 100;

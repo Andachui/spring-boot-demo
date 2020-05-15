@@ -13,7 +13,7 @@ public class MyTest {
         System.out.println(map.hashCode());
         System.out.println(map.equals(map2));
         System.out.println(map==map2);
-       int a= Solution.lengthOfLongestSubstring("pwwkew");
+       //int a= Solution.lengthOfLongestSubstring("pwwkew");
 //        System.out.println(a);
 
         Person person1=new Person();
@@ -38,14 +38,14 @@ class Person{
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-         Person a=(Person)obj;
-         return this.name.equals(a.getName());
-    }
+//    @Override
+//    public boolean equals(Object obj) {
+//         Person a=(Person)obj;
+//         return this.name.equals(a.getName());
+//    }
 }
 
-class Solution {
+class Solution3 {
     public static int lengthOfLongestSubstring(String s) {
         if (s.length()==0) return 0;
         HashMap<Character, Integer> map = new HashMap<Character, Integer>();

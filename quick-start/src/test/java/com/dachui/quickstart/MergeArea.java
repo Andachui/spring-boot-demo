@@ -9,7 +9,6 @@ public class MergeArea {
         arr[2]=3;
         arr[3]=2;
         LinkedHashMap map=new LinkedHashMap();
-        map.get()
     }
 }
 class Solution {
@@ -17,7 +16,7 @@ class Solution {
         Arrays.parallelSort(arr, new Comparator<int[]>() {
             @Override
             public int compare(int[] o1, int[] o2) {
-                return o1[0]-o2[0]>0?;
+                return 1;
             }
         });
 
@@ -28,6 +27,6 @@ class Solution {
             }
         });
 
-
+        return null;
     }
 }
